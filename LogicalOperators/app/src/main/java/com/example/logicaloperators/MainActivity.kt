@@ -11,14 +11,14 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class MainActivity : AppCompatActivity() {
-     //Declare variables
+    //Declare variables
 
     private lateinit var edtName: EditText
     private lateinit var btnCheck: Button
     private lateinit var edtAge: EditText
     private lateinit var cbStaff: CheckBox
     private lateinit var cbITStudent: CheckBox
-    private lateinit var  cbBanned: CheckBox
+    private lateinit var cbBanned: CheckBox
     private lateinit var tvResult: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,14 +29,64 @@ class MainActivity : AppCompatActivity() {
         edtName = findViewById(R.id.edtName)
         edtAge = findViewById(R.id.edtAge)
         cbStaff = findViewById(R.id.cbStaff)
-        cbITStudent= findViewById(R.id.cbITStudent)
+        cbITStudent = findViewById(R.id.cbITStudent)
         cbBanned = findViewById(R.id.cbBanned)
         btnCheck = findViewById(R.id.btnCheck)
         tvResult = findViewById(R.id.tvResult)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        //button to run the code when it is pressed
+        btnCheck.setOnClickListener {
+            //get the user's name from the editText
+            val name = edtName.text.toString()
+
+            //convert the age entered into a number (int)
+            val age = edtAge.text.toString().toInt()
+
+            //Check if checkboxes are selected (true or false)
+            val isITstudent = cbITStudent.isChecked
+            val isStaff = cbStaff.isChecked
+            val isBanned = cbBanned.isChecked
+
+
+            if (((age >= 18 && isITstudent) || isStaff) && !isBanned) {
+
+                //if the condition above is true
+                tvResult.text = "Congratulations $name! You qualify for the discount"
+            } else {
+
+
+                //if the condition is false
+                tvResult.text = "Sorry $name, you dont qualify for the discount"
+            }
+
+            /* Logical condition explanation
+        Step 1:
+        (age >= 18 && isITStudent )
+        >= means greater than or equal to
+        && means AND (both conditions must be true)
+        so this checks if the user is 18 older and is an IT student
+
+        step 2
+         || means OR (only one condition needs to be true)
+
+         This means the person can qualify if they are a staff member even if they are not
+         an IT student
+
+         Step 3 && !isBanned
+         ! means NOT (it reverses the value)
+         !isBanned means the person must not be banned
+
+         example
+         isBanned = false
+         !false = true
+         */
+
+
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+                val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+                insets
+            }
         }
     }
 }
